@@ -1,0 +1,31 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: short
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:8080}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: youtube
+
+  flyway:
+    enabled: false
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+    schemas: youtube
+    default-schema: youtube
+
+youtube:
+  api:
+    key: ${YOUTUBE_APIKEY:key}

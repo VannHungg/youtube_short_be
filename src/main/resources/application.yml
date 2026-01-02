@@ -6,9 +6,9 @@ spring:
     name: short
 
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:8080}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    url: ${DB_URL:jdbc:postgresql://pg-313d3567-vanhunglekhiet-3d8a.l.aivencloud.com:17778/youtube}
+    username: ${DB_USER:avnadmin}
+    password: ${DB_PASSWORD:}
 
   jpa:
     hibernate:
@@ -28,4 +28,4 @@ spring:
 
 youtube:
   api:
-    key: ${YOUTUBE_APIKEY:key}
+    key: ${YOUTUBE_API_KEY:}

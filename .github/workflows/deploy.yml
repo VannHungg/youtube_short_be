@@ -1,0 +1,70 @@
+name: Task Flows Pipeline
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+env:
+  APP_NAME: youtube
+jobs:
+  tests:
+    env:
+      TZ: Europe/Berlin
+    runs-on: ubuntu-latest
+    name: Tests
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{hashFiles('**/pom.xml')}}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Running Unit Tests
+        run: |
+          ./mvnw clean test
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    name: Build & Deploy
+    needs: tests
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{hashFiles('**/pom.xml')}}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Extract project version
+        id: extract_version
+        run: |
+          echo "VERSION=$(./mvnw -q -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT
+
+      - name: Build application
+        run: ./mvnw clean package -DskipTests
+      - name: Setup docker buildx
+        uses: docker/build-push-action@v5

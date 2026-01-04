@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>youtube</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>short</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
@@ -74,19 +74,6 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
             <version>${flyway.version}</version>
-        </dependency>
-
-        <!-- Java YouTube Downloader -->
-        <dependency>
-            <groupId>com.github.sealedtx</groupId>
-            <artifactId>java-youtube-downloader</artifactId>
-            <version>3.3.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.axet</groupId>
-            <artifactId>vget</artifactId>
-            <version>1.1.33</version>
         </dependency>
 
     </dependencies>

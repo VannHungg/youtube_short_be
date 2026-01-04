@@ -4,13 +4,10 @@ import com.example.youtube.dto.YoutubeDto;
 import com.example.youtube.dto.request.ChannelRequest;
 import com.example.youtube.dto.request.DownloadRequest;
 import com.example.youtube.service.YoutubeService;
-import com.github.axet.vget.VGet;
-import com.github.kiulian.downloader.YoutubeDownloader;
-import com.github.kiulian.downloader.model.videos.VideoInfo;
-import com.github.kiulian.downloader.model.videos.formats.VideoWithAudioFormat;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -29,19 +25,24 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.Collections;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/youtube")
 @RequiredArgsConstructor
 public class YoutubeController {
     private final YoutubeService youtubeService;
-    private final String containerName = "yt-dlp-container";
-    private final String hostVideoFolder = "D:/udemy/getShortYotube/videos"; // host Windows
-    private final String containerVideoFolder = "/videos";
+
+    @Value("${yt.container.name}")
+    private String containerName;
+
+    @Value("${yt.video.host-folder}")
+    private String hostVideoFolder;
+
+    @Value("${yt.video.container-folder}")
+    private String containerVideoFolder;
 
     @PostMapping("/suggestion")
     public ResponseEntity<YoutubeDto> suggestionUrl(@RequestBody ChannelRequest channelRequest) throws BadRequestException {
@@ -125,6 +126,7 @@ public class YoutubeController {
             }
 
             System.out.println("Video streamed successfully: " + videoFile.getName());
+            videoFile.delete();
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

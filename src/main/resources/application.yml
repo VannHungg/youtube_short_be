@@ -20,7 +20,7 @@ spring:
         default_schema: youtube
 
   flyway:
-    enabled: false
+    enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migration
     schemas: youtube
@@ -28,4 +28,11 @@ spring:
 
 youtube:
   api:
-    key: ${YOUTUBE_API_KEY:}
+    key: ${YOUTUBE_API_KEY:AIzaSyDt_UoaeAl3uNKNKl6sjjpwRpIC1qQ1EYE}
+
+yt:
+  container:
+    name: yt-dlp-container
+  video:
+    host-folder: /app/videos #server
+    container-folder: /videos #container

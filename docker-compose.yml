@@ -1,0 +1,22 @@
+services:
+  app:
+    image: ${DOCKER_USERNAME}/${APP_NAME}:latest
+    container_name: ${APP_NAME}
+    restart: unless-stopped
+    environment:
+      - DB_URL=pg-313d3567-vanhunglekhiet-3d8a.l.aivencloud.com
+      - DB_PORT=17778
+      - DB_NAME=${PG_DB_DB_NAME}
+      - DB_USERNAME=${PG_DB_USERNAME}
+      - DB_PASSWORD=${PG_DB_PASSWORD}
+    ports:
+      - "8080:8080"
+    depends_on:
+      -
+
+volumes:
+  postgres:
+
+networks:
+  default:
+    name: task_flows_default
